@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
     <title>Gretschno Welcome</title>
     <style>
         body {
             background-color: black;
             color: white;
             display: flex;
+            flex-direction: column; /* Change to column layout */
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
             font-family: 'Courier New', monospace;
         }
+        main {
+            margin-top: 20px; /* Add margin to separate the div and the p5.js sketch */
+        }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div>
         <p>Hello world,<br>Welcome to Gretschno.</p>
     </div>
-</body>
+    <main>
+    </main>
+    <script src="sketch.js"></script>
+  </body>
 </html>
