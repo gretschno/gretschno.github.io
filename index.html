@@ -88,13 +88,9 @@
             background-color: rgba(200, 200, 200, 1);
         }
     </style>
-
-<!-- /**
-* thank you mrdoob
-*
-* 04 February 2024 - @blurspline
-*/ -->
-
+    <script>
+        document.title = "Gretschno Worldwide"; // Set the title dynamically
+    </script>
 </head>
 
 <body>
@@ -114,7 +110,7 @@
     <div id="audio-player">
         <select id="track-selector">
             <option value="diss_gretschno_loop.mp3">gretschno loop1</option>
-            <option value="diss_gretschno_loop2.mp3">gretschno loop1</option>
+            <option value="diss_gretschno_loop2.mp3">gretschno loop2</option>
             <option value="Us_openUpToMe_endBeat.mp3">open up to me_CODA</option>
         </select>
         <div>
@@ -224,39 +220,68 @@
     </script>
 
     <script>
-        const audio = new Audio();
-        audio.loop = true; // Ensure the audio loops
+        // Web Audio API setup
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioBuffer;
+        let source;
+
         const playPauseButton = document.getElementById('play-pause-button');
         const trackSelector = document.getElementById('track-selector');
         const volumeDownButton = document.getElementById('volume-down-button');
         const volumeUpButton = document.getElementById('volume-up-button');
 
+        async function loadTrack(url) {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        }
+
+        function playMusic() {
+            if (source) {
+                source.stop();
+            }
+            source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(audioContext.destination);
+            source.loop = true;
+            source.start(0);
+        }
+
+        function stopMusic() {
+            if (source) {
+                source.stop();
+            }
+        }
+
         playPauseButton.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            if (source && !source.loop) {
+                playMusic();
                 playPauseButton.textContent = 'Pause';
             } else {
-                audio.pause();
+                stopMusic();
                 playPauseButton.textContent = 'Play';
             }
         });
 
-        trackSelector.addEventListener('change', () => {
-            audio.src = trackSelector.value;
-            audio.play();
+        trackSelector.addEventListener('change', async () => {
+            await loadTrack(trackSelector.value);
+            playMusic();
             playPauseButton.textContent = 'Pause';
         });
 
         volumeDownButton.addEventListener('click', () => {
-            audio.volume = Math.max(0, audio.volume - 0.1);
+            audioContext.destination.gain.value = Math.max(0, audioContext.destination.gain.value - 0.1);
         });
 
         volumeUpButton.addEventListener('click', () => {
-            audio.volume = Math.min(1, audio.volume + 0.1);
+            audioContext.destination.gain.value = Math.min(1, audioContext.destination.gain.value + 0.1);
         });
 
-        // Set initial track
-        audio.src = trackSelector.value;
+        // Load initial track
+        loadTrack(trackSelector.value);
     </script>
 </body>
 </html>
