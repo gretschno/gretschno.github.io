@@ -12,7 +12,6 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            /* overflow: hidden; /Add this line to prevent scrolling */
         }
 
         #header {
@@ -33,7 +32,6 @@
 
         #camera-info {
             white-space: pre;
-            
         }
 
         #contact-link {
@@ -47,6 +45,47 @@
         #contact-link a {
             color: white;
             text-decoration: none;
+        }
+
+        #audio-player {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        #audio-player select, #audio-player button {
+            margin: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        #audio-player button {
+            cursor: pointer;
+        }
+
+        #audio-player button:hover, #audio-player select:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .invert-button {
+            background-color: white;
+            color: black;
+        }
+
+        .invert-button:hover {
+            background-color: rgba(200, 200, 200, 1);
         }
     </style>
 
@@ -70,6 +109,19 @@
 
     <div id="info">
         <div id="camera-info"></div>
+    </div>
+
+    <div id="audio-player">
+        <select id="track-selector">
+            <option value="diss_gretschno_loop.mp3">gretschno loop1</option>
+            <option value="diss_gretschno_loop2.mp3">gretschno loop1</option>
+            <option value="Us_openUpToMe_endBeat.mp3">open up to me_CODA</option>
+        </select>
+        <div>
+            <button id="play-pause-button" class="invert-button">Play</button>
+            <button id="volume-down-button">-</button>
+            <button id="volume-up-button">+</button>
+        </div>
     </div>
 
     <script type="importmap">
@@ -169,6 +221,42 @@
             effect.render(scene, camera);
         }
 
+    </script>
+
+    <script>
+        const audio = new Audio();
+        audio.loop = true; // Ensure the audio loops
+        const playPauseButton = document.getElementById('play-pause-button');
+        const trackSelector = document.getElementById('track-selector');
+        const volumeDownButton = document.getElementById('volume-down-button');
+        const volumeUpButton = document.getElementById('volume-up-button');
+
+        playPauseButton.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseButton.textContent = 'Pause';
+            } else {
+                audio.pause();
+                playPauseButton.textContent = 'Play';
+            }
+        });
+
+        trackSelector.addEventListener('change', () => {
+            audio.src = trackSelector.value;
+            audio.play();
+            playPauseButton.textContent = 'Pause';
+        });
+
+        volumeDownButton.addEventListener('click', () => {
+            audio.volume = Math.max(0, audio.volume - 0.1);
+        });
+
+        volumeUpButton.addEventListener('click', () => {
+            audio.volume = Math.min(1, audio.volume + 0.1);
+        });
+
+        // Set initial track
+        audio.src = trackSelector.value;
     </script>
 </body>
 </html>
