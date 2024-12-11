@@ -181,28 +181,12 @@
 
             document.body.appendChild(effect.domElement);
 
-            const cameraInfoElement = document.getElementById('camera-info');
-            const headerElement = document.getElementById('header');
-
             controls = new TrackballControls(camera, effect.domElement);
-
-            window.addEventListener('resize', onWindowResize);
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            effect.setSize(window.innerWidth, window.innerHeight);
         }
 
         function animate() {
             requestAnimationFrame(animate);
-            render();
-        }
-
-        function render() {
+            // Update sphere position
             const timer = Date.now() - start;
 
             sphere.position.y = Math.abs(Math.sin(timer * 0.002)) * 200;
@@ -222,8 +206,11 @@
     <script>
         // Web Audio API setup
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const gainNode = audioContext.createGain();
+        gainNode.connect(audioContext.destination);
         let audioBuffer;
         let source;
+        let isPlaying = false;
 
         const playPauseButton = document.getElementById('play-pause-button');
         const trackSelector = document.getElementById('track-selector');
@@ -242,27 +229,29 @@
             }
             source = audioContext.createBufferSource();
             source.buffer = audioBuffer;
-            source.connect(audioContext.destination);
+            source.connect(gainNode);
             source.loop = true;
             source.start(0);
+            isPlaying = true;
         }
 
         function stopMusic() {
             if (source) {
                 source.stop();
             }
+            isPlaying = false;
         }
 
         playPauseButton.addEventListener('click', () => {
             if (audioContext.state === 'suspended') {
                 audioContext.resume();
             }
-            if (source && !source.loop) {
-                playMusic();
-                playPauseButton.textContent = 'Pause';
-            } else {
+            if (isPlaying) {
                 stopMusic();
                 playPauseButton.textContent = 'Play';
+            } else {
+                playMusic();
+                playPauseButton.textContent = 'Pause';
             }
         });
 
@@ -273,11 +262,11 @@
         });
 
         volumeDownButton.addEventListener('click', () => {
-            audioContext.destination.gain.value = Math.max(0, audioContext.destination.gain.value - 0.1);
+            gainNode.gain.value = Math.max(0, gainNode.gain.value - 0.1);
         });
 
         volumeUpButton.addEventListener('click', () => {
-            audioContext.destination.gain.value = Math.min(1, audioContext.destination.gain.value + 0.1);
+            gainNode.gain.value = Math.min(1, gainNode.gain.value + 0.1);
         });
 
         // Load initial track
