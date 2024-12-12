@@ -176,8 +176,8 @@
 
             effect = new AsciiEffect(renderer, ' .:-+*=%@#', { invert: true });
             effect.setSize(window.innerWidth, window.innerHeight);
-            effect.domElement.style.color = 'white';
-            effect.domElement.style.backgroundColor = 'black';
+            effect.domElement.style.color = 'white'; // text color
+            effect.domElement.style.backgroundColor = 'transparent'; // transparent background
 
             document.body.appendChild(effect.domElement);
 
@@ -259,6 +259,19 @@
             await loadTrack(trackSelector.value);
             playMusic();
             playPauseButton.textContent = 'Pause';
+
+            // Change background color and text color based on selected track
+            const selectedTrack = trackSelector.value;
+            if (selectedTrack === 'diss_gretschno_loop2.mp3') {
+                document.body.style.backgroundColor = '#004239';
+                effect.domElement.style.color = 'green';
+            } else if (selectedTrack === 'Us_openUpToMe_endBeat.mp3') {
+                document.body.style.backgroundColor = '#123524';
+                effect.domElement.style.color = 'blue';
+            } else {
+                document.body.style.backgroundColor = 'black';
+                effect.domElement.style.color = 'white';
+            }
         });
 
         volumeDownButton.addEventListener('click', () => {

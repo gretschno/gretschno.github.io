@@ -89,3 +89,28 @@ a, button, input, select {
 	margin-top: 20px;
 	padding: 10px;
 }
+
+@media only screen and (max-width: 430px) {
+	body {
+		font-size: 11px;
+		line-height: 20px;
+	}
+	#header {
+		padding: 20px;
+	}
+	#info {
+		padding: 5px;
+	}
+	#contact-link {
+		padding: 10px;
+	}
+	#audio-player {
+		top: 5px;
+		right: 5px;
+		padding: 5px;
+	}
+	#audio-player select, #audio-player button {
+		margin: 2px;
+		padding: 3px;
+	}
+}

@@ -14,10 +14,10 @@ class AsciiEffect {
 
 		// Some ASCII settings
 
-		const fResolution = options[ 'resolution' ] || 0.15; // Higher for more details
+		const fResolution = options[ 'resolution' ] || 0.17; // Higher for more details
 		const iScale = options[ 'scale' ] || 1;
 		const bColor = options[ 'color' ] || false; // nice but slows down rendering!
-		const bAlpha = options[ 'alpha' ] || false; // Transparency
+		const bAlpha = options[ 'alpha' ] || true; // Transparency
 		const bBlock = options[ 'block' ] || false; // blocked characters. like good O dos
 		const bInvert = options[ 'invert' ] || false; // black is white, white is black
 		const strResolution = options[ 'strResolution' ] || 'low';
