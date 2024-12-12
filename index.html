@@ -51,7 +51,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.303);
             padding: 10px;
             border-radius: 5px;
             color: white;
@@ -63,7 +63,7 @@
 
         #audio-player select, #audio-player button {
             margin: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(125, 136, 154, 0.242);
             border: none;
             color: white;
             padding: 5px;
@@ -76,7 +76,7 @@
         }
 
         #audio-player button:hover, #audio-player select:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(22, 104, 19, 0.55);
         }
 
         .invert-button {
@@ -109,9 +109,10 @@
 
     <div id="audio-player">
         <select id="track-selector">
-            <option value="diss_gretschno_loop.mp3">gretschno loop1</option>
-            <option value="diss_gretschno_loop2.mp3">gretschno loop2</option>
-            <option value="Us_openUpToMe_endBeat.mp3">open up to me_CODA</option>
+            <option value="tunes/diss_gretschno_loop.mp3">gretschno loop1</option>
+            <option value="tunes/diss_gretschno_loop2.mp3">gretschno loop2</option>
+            <option value="tunes/Us_openUpToMe_endBeat.mp3">open up to me_CODA</option>
+            <option value="tunes/jerrods_solange_2.mp3">jerrod_solange_2</option>
         </select>
         <div>
             <button id="play-pause-button" class="invert-button">Play</button>
@@ -156,25 +157,43 @@
 
             const pointLight1 = new THREE.PointLight(0xffffff, 3, 0, 0);
             pointLight1.position.set(500, 500, 500);
+            //pointLight1.castShadow = false; // Enable shadows for the light
             scene.add(pointLight1);
 
             const pointLight2 = new THREE.PointLight(0xffffff, 1, 0, 0);
             pointLight2.position.set(-500, -500, -500);
+            //pointLight2.castShadow = true; // Enable shadows for the light
             scene.add(pointLight2);
 
+            // Sphere
             sphere = new THREE.Mesh(new THREE.SphereGeometry(100, 20, 10), new THREE.MeshPhongMaterial({ flatShading: true }));
+            //shape.position.y = 50; // Ensure the shape is within the camera's view
+            //shape.castShadow = true; // Enable shadows for the shape
             scene.add(sphere);
 
             // Plane
             plane = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), new THREE.MeshBasicMaterial({ color: 0xe0e0e0 }));
             plane.position.y = -100;
             plane.rotation.x = -Math.PI / 2;
+            //plane.receiveShadow = true; // Enable shadows for the plane
             scene.add(plane);
+
+            /*            // Define a cube shape
+            const cubeGeometry = new THREE.BoxGeometry(100, 100, 100);
+            const cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00, flatShading: true });
+            const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            
+            // Position the cube
+            cube.position.set(0, 50, 0);
+            
+            // Add the cube to the scene
+            //scene.add(cube);                  */
 
             renderer = new THREE.WebGLRenderer();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            //renderer.shadowMap.enabled = true; // Enable shadow maps in the renderer
 
-            effect = new AsciiEffect(renderer, ' .:-+*=%@#', { invert: true });
+            effect = new AsciiEffect(renderer, ' .:-+*=%N0@Sé#', { invert: true }); // ASCII characters
             effect.setSize(window.innerWidth, window.innerHeight);
             effect.domElement.style.color = 'white'; // text color
             effect.domElement.style.backgroundColor = 'transparent'; // transparent background
@@ -262,13 +281,17 @@
 
             // Change background color and text color based on selected track
             const selectedTrack = trackSelector.value;
-            if (selectedTrack === 'diss_gretschno_loop2.mp3') {
-                document.body.style.backgroundColor = '#004239';
+            if (selectedTrack === 'tunes/diss_gretschno_loop2.mp3') {
+                document.body.style.backgroundColor = '#004239'; // Teal
                 effect.domElement.style.color = 'green';
-            } else if (selectedTrack === 'Us_openUpToMe_endBeat.mp3') {
-                document.body.style.backgroundColor = '#123524';
-                effect.domElement.style.color = 'blue';
-            } else {
+            } else if (selectedTrack === 'tunes/Us_openUpToMe_endBeat.mp3') {
+                document.body.style.backgroundColor = '#123524'; // #123524 Pthalo green
+                effect.domElement.style.color = 'blue'; // #000F89 Phthalo blue
+            } else if (selectedTrack === 'tunes/jerrods_solange_2.mp3') {
+                document.body.style.backgroundColor = '#1A534C'; // #1A534C Persian green
+                effect.domElement.style.color = 'blue'; // #000F89 Phthalo blue
+            } 
+            else {
                 document.body.style.backgroundColor = 'black';
                 effect.domElement.style.color = 'white';
             }
